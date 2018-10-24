@@ -1,6 +1,6 @@
 const synth = window.speechSynthesis;
 
-const textForem = document.querySelector('form')
+const textForm = document.querySelector('form')
 const textInput = document.querySelector('#text-input')
 const voiceSelect = document.querySelector('#voice-select')
 const rate = document.querySelector('#rate')
@@ -31,3 +31,56 @@ getVoices();
 if(synth.onvoiceschanged !== undefined) {
     synth.onvoiceschanged = getVoices;
 }
+
+// Speak
+const speak = () => {
+    // Check if speaking
+    if (synth.speaking) {
+        console.error('Already speaking...');
+        return;
+    }
+    // Check text field
+    if (textInput.value !== '') {
+        
+        // Get text
+        const speakText = new SpeechSynthesisUtterance(textInput.value);
+        
+        // Speak end
+        speakText.onend = e => {
+            console.log('Done speaking...');
+        }
+
+        // Speak error
+        speakText.onerror = e => {
+            console.error('Speak error...');
+        }
+
+        // Select voice
+        const selectedVoice = voiceSelect.selectedOptions[0].getAttribute('data-name');
+
+
+        // Loop through voices
+        voices.forEach(voice => {
+            if (voice.name === selectedVoice) {
+                speakText.voice = voice;
+            }
+        });
+
+        // Set rate and pitch
+        speakText.rate = rate.value;
+        speakText.pitch = pitch.value;
+
+        // Speak
+        synth.speak(speakText);
+    }
+}
+
+// Event listeners
+
+textForm.addEventListener('submit', e => {
+    e.preventDefault();
+    speak();
+    textInput.blur();
+});
+
+voiceSelect.addEventListener('change', e => speak());
