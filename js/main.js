@@ -18,9 +18,16 @@ const getVoices = () => {
         option.setAttribute('data-name', voice.name);
         voiceSelect.appendChild(option);
     });
+
+    // Initialize Materialize FormSelect
+    options = {}
+    var elems = document.querySelectorAll('#voice-select');
+    var instances = M.FormSelect.init(elems, options);
+
 }
 
 getVoices();
+
 if(synth.onvoiceschanged !== undefined) {
     synth.onvoiceschanged = getVoices;
 }
