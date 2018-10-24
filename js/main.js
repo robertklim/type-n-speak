@@ -5,6 +5,7 @@ const textInput = document.querySelector('#text-input')
 const voiceSelect = document.querySelector('#voice-select')
 const rate = document.querySelector('#rate')
 const pitch = document.querySelector('#pitch')
+const body = document.querySelector('body')
 
 let voices = []
 
@@ -41,13 +42,19 @@ const speak = () => {
     }
     // Check text field
     if (textInput.value !== '') {
+        // Show background animation
+        body.style.background = '#000 url(img/audio.gif)';
+        body.style.backgroundRepeat = 'repeat-x';
+        body.style.backgroundSize = '100% 100%';
         
         // Get text
         const speakText = new SpeechSynthesisUtterance(textInput.value);
         
         // Speak end
         speakText.onend = e => {
+            // Hide background animation
             console.log('Done speaking...');
+            body.style.background = '#000';
         }
 
         // Speak error
